@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if action == 'edit' %}編輯客戶{% else %}新增客戶{% endif %} - CRM 系統{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-4">
+            <i class="fas fa-{{ 'edit' if action == 'edit' else 'plus' }}"></i>
+            {% if action == 'edit' %}編輯客戶{% else %}新增客戶{% endif %}
+        </h1>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-user"></i> 姓名 <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                       value="{{ customer.name if customer else '' }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">
+                                    <i class="fas fa-phone"></i> 電話 <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" class="form-control" id="phone" name="phone"
+                                       value="{{ customer.phone if customer else '' }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> Email <span class="text-danger">*</span>
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               value="{{ customer.email if customer else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> 地址
+                        </label>
+                        <input type="text" class="form-control" id="address" name="address"
+                               value="{{ customer.address if customer else '' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">
+                            <i class="fas fa-sticky-note"></i> 備註
+                        </label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3">{{ customer.notes if customer else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-tags"></i> 標籤
+                        </label>
+                        <div class="row">
+                            {% for tag in tags %}
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="tag_{{ tag }}" name="tags" value="{{ tag }}"
+                                           {{ 'checked' if customer and tag in customer.tags else '' }}>
+                                    <label class="form-check-label" for="tag_{{ tag }}">
+                                        <span class="badge bg-secondary">{{ tag }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="form-text">
+                            您可以選擇多個標籤來分類客戶
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('customer_list') }}" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-times"></i> 取消
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-{{ 'save' if action == 'edit' else 'plus' }}"></i>
+                            {{ '更新' if action == 'edit' else '新增' }}客戶
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

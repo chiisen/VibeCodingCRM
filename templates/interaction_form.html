@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}新增互動記錄 - CRM 系統{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-4">
+            <i class="fas fa-plus"></i> 新增互動記錄
+        </h1>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-comments"></i> 互動記錄表單
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="type" class="form-label">
+                            <i class="fas fa-list"></i> 互動類型 <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="">請選擇互動類型</option>
+                            <option value="電話">電話</option>
+                            <option value="會議">會議</option>
+                            <option value="Email">Email</option>
+                            <option value="簡訊">簡訊</option>
+                            <option value="拜訪">拜訪</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">
+                            <i class="fas fa-calendar"></i> 互動日期 <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control" id="date" name="date"
+                               value="{{ request.form.get('date', '') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-sticky-note"></i> 互動內容 <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="5"
+                                  placeholder="請詳細描述本次互動的內容、結果和後續跟進事項..." required>{{ request.form.get('description', '') }}</textarea>
+                        <div class="form-text">
+                            請盡可能詳細記錄互動內容，這將有助於後續的客戶服務和銷售跟進
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('customer_detail', customer_id=customer_id) }}" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-times"></i> 取消
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> 儲存記錄
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Tips -->
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-lightbulb"></i> 記錄提示
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-phone"></i> 電話記錄</h6>
+                        <ul class="list-unstyled small">
+                            <li>• 通話目的</li>
+                            <li>• 客戶需求</li>
+                            <li>• 後續行動</li>
+                            <li>• 下次聯繫時間</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-users"></i> 會議記錄</h6>
+                        <ul class="list-unstyled small">
+                            <li>• 會議主題</li>
+                            <li>• 參與人員</li>
+                            <li>• 討論重點</li>
+                            <li>• 決議事項</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-envelope"></i> Email記錄</h6>
+                        <ul class="list-unstyled small">
+                            <li>• 郵件主題</li>
+                            <li>• 主要內容</li>
+                            <li>• 客戶回饋</li>
+                            <li>• 後續處理</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

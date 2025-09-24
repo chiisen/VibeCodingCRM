@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}客戶列表 - CRM 系統{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">
+            <i class="fas fa-users"></i> 客戶列表
+        </h1>
+        <a href="{{ url_for('new_customer') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> 新增客戶
+        </a>
+    </div>
+</div>
+
+<!-- Search and Filter Form -->
+<div class="row mb-4">
+    <div class="col">
+        <form method="GET" class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="search" class="form-label">
+                                <i class="fas fa-search"></i> 搜尋客戶
+                            </label>
+                            <input type="text" class="form-control" id="search" name="search"
+                                   value="{{ search_query }}" placeholder="輸入姓名、電話或 Email">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="tag" class="form-label">
+                                <i class="fas fa-tags"></i> 篩選標籤
+                            </label>
+                            <select class="form-select" id="tag" name="tag">
+                                <option value="">全部標籤</option>
+                                {% for tag in tags %}
+                                <option value="{{ tag }}" {{ 'selected' if tag_filter == tag else '' }}>
+                                    {{ tag }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-filter"></i> 篩選
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Customers List -->
+{% if customers %}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list"></i> 客戶列表 ({{ customers|length }})
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-user"></i> 姓名</th>
+                                <th><i class="fas fa-phone"></i> 電話</th>
+                                <th><i class="fas fa-envelope"></i> Email</th>
+                                <th><i class="fas fa-map-marker-alt"></i> 地址</th>
+                                <th><i class="fas fa-tags"></i> 標籤</th>
+                                <th><i class="fas fa-calendar"></i> 建立時間</th>
+                                <th><i class="fas fa-cogs"></i> 操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('customer_detail', customer_id=customer.id) }}" class="text-decoration-none fw-bold">
+                                        {{ customer.name }}
+                                    </a>
+                                </td>
+                                <td>{{ customer.phone }}</td>
+                                <td>
+                                    <a href="mailto:{{ customer.email }}" class="text-decoration-none">
+                                        {{ customer.email }}
+                                    </a>
+                                </td>
+                                <td>{{ customer.address or '-' }}</td>
+                                <td>
+                                    {% if customer.tags %}
+                                        {% for tag in customer.tags %}
+                                        <span class="badge bg-secondary tag-badge">{{ tag }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ customer.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{{ url_for('customer_detail', customer_id=customer.id) }}"
+                                           class="btn btn-outline-info" title="查看詳情">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('edit_customer', customer_id=customer.id) }}"
+                                           class="btn btn-outline-warning" title="編輯">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form method="POST" action="{{ url_for('delete_customer_route', customer_id=customer.id) }}"
+                                              class="d-inline"
+                                              onsubmit="return confirm('確定要刪除這個客戶嗎？')">
+                                            <button type="submit" class="btn btn-outline-danger" title="刪除">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            目前沒有客戶資料。
+            <a href="{{ url_for('new_customer') }}" class="alert-link">點擊這裡新增第一個客戶</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

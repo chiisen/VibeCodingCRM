@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ customer.name }} - 客戶詳情{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">
+            <i class="fas fa-user"></i> {{ customer.name }}
+        </h1>
+        <div>
+            <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="btn btn-warning me-2">
+                <i class="fas fa-edit"></i> 編輯客戶
+            </a>
+            <a href="{{ url_for('new_interaction', customer_id=customer.id) }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> 新增互動
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Customer Information -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle"></i> 客戶資訊
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong><i class="fas fa-user"></i> 姓名：</strong>
+                    <span>{{ customer.name }}</span>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-phone"></i> 電話：</strong>
+                    <a href="tel:{{ customer.phone }}" class="text-decoration-none">
+                        {{ customer.phone }}
+                    </a>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-envelope"></i> Email：</strong>
+                    <a href="mailto:{{ customer.email }}" class="text-decoration-none">
+                        {{ customer.email }}
+                    </a>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-map-marker-alt"></i> 地址：</strong>
+                    <span>{{ customer.address or '未提供' }}</span>
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-calendar"></i> 建立時間：</strong>
+                    <span>{{ customer.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                </div>
+                {% if customer.notes %}
+                <div class="mb-3">
+                    <strong><i class="fas fa-sticky-note"></i> 備註：</strong>
+                    <div class="mt-2 p-2 bg-light rounded">
+                        {{ customer.notes }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if customer.tags %}
+                <div class="mb-3">
+                    <strong><i class="fas fa-tags"></i> 標籤：</strong>
+                    <div class="mt-2">
+                        {% for tag in customer.tags %}
+                        <span class="badge bg-secondary tag-badge">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Interaction History -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-comments"></i> 互動記錄 ({{ interactions|length }})
+                </h5>
+                <a href="{{ url_for('new_interaction', customer_id=customer.id) }}" class="btn btn-sm btn-success">
+                    <i class="fas fa-plus"></i> 新增記錄
+                </a>
+            </div>
+            <div class="card-body">
+                {% if interactions %}
+                <div class="interaction-timeline">
+                    {% for interaction in interactions|sort(attribute='created_at', reverse=true) %}
+                    <div class="interaction-item">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-{{ 'phone' if interaction.type == '電話' else 'users' if interaction.type == '會議' else 'envelope' if interaction.type == 'Email' else 'comment' }}"></i>
+                                            {{ interaction.type }}
+                                        </h6>
+                                        <p class="card-text">{{ interaction.description }}</p>
+                                        <div class="row text-muted small">
+                                            <div class="col-sm-6">
+                                                <i class="fas fa-calendar"></i> 互動日期: {{ interaction.date }}
+                                            </div>
+                                            <div class="col-sm-6 text-end">
+                                                <i class="fas fa-clock"></i> 記錄時間: {{ interaction.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">目前沒有互動記錄</p>
+                    <a href="{{ url_for('new_interaction', customer_id=customer.id) }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> 新增第一筆互動記錄
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Back Button -->
+<div class="row mt-4">
+    <div class="col">
+        <a href="{{ url_for('customer_list') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回客戶列表
+        </a>
+    </div>
+</div>
+{% endblock %}
