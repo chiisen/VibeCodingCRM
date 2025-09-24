@@ -1,0 +1,2 @@
+# VibeCodingCRM
+Vibe Coding CRM
