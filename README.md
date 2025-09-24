@@ -30,6 +30,7 @@ python app.py
 ```
 3. 開啟瀏覽器 訪問 http://localhost:5000 開始使用
 # 📁 專案結構
+```bash
 VibeCodingCRM/  
 ├── app.py                 # 主應用程式  
 ├── requirements.txt       # 依賴套件  
@@ -42,6 +43,7 @@ VibeCodingCRM/
 │   └── interaction_form.html # 互動表單  
 ├── PRD.md                # 產品需求文件  
 └── README.md             # 專案說明  
+```
 # 🔧 主要特色
 - 記憶體儲存：所有資料暫存在記憶體中，適合演示用途
 - 無需資料庫：輕量級實現，快速部署
