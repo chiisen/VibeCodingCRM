@@ -30,7 +30,7 @@ python app.py
 ```
 3. 開啟瀏覽器 訪問 http://localhost:5000 開始使用
 # 📁 專案結構
-VibeCodingCRM/
+VibeCodingCRM/  
 ├── app.py                 # 主應用程式  
 ├── requirements.txt       # 依賴套件  
 ├── templates/             # HTML 模板  
