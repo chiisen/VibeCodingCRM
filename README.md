@@ -1,6 +1,8 @@
 # CRM 
 Vibe Coding CRM
 
+![CRM01](./images/CRM01.jpg)
+
 1. 客戶管理系統
 - 完整的客戶 CRUD 操作（新增、查看、編輯、刪除）
 - 客戶基本資訊管理（姓名、電話、Email、地址、備註）
